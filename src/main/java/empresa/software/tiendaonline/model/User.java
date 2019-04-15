@@ -14,6 +14,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  *
@@ -66,6 +68,16 @@ public class User extends DateAudit {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     @JsonIgnore
     private Set<Role> roles = new HashSet<>();
+    
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "wishlist",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "producto_id"))
+    private Set<Producto> wishlist;
+    
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<ShoppingCart> shoppingCart = new HashSet<>();
     
     public User() {
 
@@ -133,5 +145,21 @@ public class User extends DateAudit {
 
     public void setVerified(Boolean verified) {
         this.verified = verified;
+    }
+
+    public Set<Producto> getWishlist() {
+        return wishlist;
+    }
+
+    public void setWishlist(Set<Producto> wishlist) {
+        this.wishlist = wishlist;
+    }
+
+    public Set<ShoppingCart> getShoppingCart() {
+        return shoppingCart;
+    }
+
+    public void setShoppingCart(Set<ShoppingCart> shoppingCart) {
+        this.shoppingCart = shoppingCart;
     }
 }

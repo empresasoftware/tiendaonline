@@ -13,6 +13,7 @@ import empresa.software.tiendaonline.exception.AppException;
 import empresa.software.tiendaonline.model.User;
 import empresa.software.tiendaonline.model.Role;
 import empresa.software.tiendaonline.model.RoleName;
+import empresa.software.tiendaonline.model.Vendedor;
 import empresa.software.tiendaonline.payload.ApiResponse;
 import empresa.software.tiendaonline.payload.JwtAuthenticationResponse;
 import empresa.software.tiendaonline.payload.LoginRequest;
@@ -89,13 +90,25 @@ public class AuthController {
         }
 
         // Creating user's account
-        User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
+        User user = null;
+        Role userRole = null;
+        
+        if (signUpRequest.getRol().equals(RoleName.ROLE_USER.toString())){
+            user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
                 signUpRequest.getEmail(), signUpRequest.getPassword());
-
+            userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                .orElseThrow(() -> new AppException("User Role not set."));     
+        } else if (signUpRequest.getRol().equals(RoleName.ROLE_SHOP.toString())) {
+            user = new Vendedor(null, signUpRequest.getName(), signUpRequest.getUsername(),
+                signUpRequest.getEmail(), signUpRequest.getPassword());
+            userRole = roleRepository.findByName(RoleName.ROLE_SHOP)
+                .orElseThrow(() -> new AppException("Shop Role not set."));    
+        } else {
+            return new ResponseEntity(new ApiResponse(false, "Role Error!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+        
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
-                .orElseThrow(() -> new AppException("User Role not set."));
 
         user.setRoles(Collections.singleton(userRole));
 

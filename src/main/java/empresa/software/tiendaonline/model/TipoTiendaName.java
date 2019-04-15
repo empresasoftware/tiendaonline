@@ -9,18 +9,8 @@ package empresa.software.tiendaonline.model;
  *
  * @author pedro
  */
-public enum  RoleName {
-    ROLE_USER {
-        @Override
-        public String toString() {
-            return "ROLE_USER";
-        }
-    },
+public enum TipoTiendaName {
+    ROLE_USER,
     ROLE_ADMIN,
-    ROLE_SHOP {
-        @Override
-        public String toString() {
-            return "ROLE_SHOP";
-        }
-    }
+    ROLE_SHOP
 }
