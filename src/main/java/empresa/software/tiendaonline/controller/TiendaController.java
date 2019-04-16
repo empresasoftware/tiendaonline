@@ -32,6 +32,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -89,7 +90,7 @@ public class TiendaController {
     }
 
     @Secured({"ROLE_SHOP"})
-    @PostMapping("/registrar")
+    @PostMapping
     public ResponseEntity<?> nuevaTienda(@CurrentUser UserPrincipal userprincipal, @Valid @RequestBody TiendaRequest tiendaRequest) {
         Vendedor vendedor = (Vendedor) userRepository.findById(userprincipal.getId()).get();
 
@@ -108,6 +109,7 @@ public class TiendaController {
         TipoTienda tipoTienda = tipoTiendaRepository.findByName(tipoTiendaName)
                 .orElseThrow(() -> new AppException("Tipo Tienda not set."));
         Tienda tienda = new Tienda(tiendaRequest.getName(), tiendaRequest.getShopname(), tipoTienda);
+        tiendaRepository.save(tienda);
         vendedor.setTienda(tienda);
         vendedorRepository.save(vendedor);
         
@@ -180,5 +182,15 @@ public class TiendaController {
                 .buildAndExpand(tienda.getShopname()).toUri();
         
         return ResponseEntity.created(location).body(new ApiResponse(true, "Tienda registered successfully"));
+    }
+    @Secured({"ROLE_SHOP"})
+    @PutMapping("/logoTienda")
+    public ResponseEntity<?> uploadLogoTienda(@CurrentUser UserPrincipal userprincipal,
+            @RequestParam("file") MultipartFile file) {
+        Vendedor vendedor = vendedorRepository.findById(userprincipal.getId()).get();
+        String urlLogo = fileStorageService.storeFile(file);
+        vendedor.getTienda().setLogo(urlLogo);
+        vendedorRepository.save(vendedor);
+        return ResponseEntity.ok().body(new ApiResponse(true, "Logo updated successfully"));
     }
 }

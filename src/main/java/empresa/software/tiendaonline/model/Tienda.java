@@ -41,7 +41,7 @@ public class Tienda extends DateAudit{
     @Size(max = 20)
     private String shopname;
 
-    @NotBlank
+    //@NotBlank
     @Size(max = 200)
     private String logo;
     

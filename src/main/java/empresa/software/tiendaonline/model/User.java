@@ -79,6 +79,10 @@ public class User extends DateAudit {
     @JsonIgnore
     private Set<ShoppingCart> shoppingCart = new HashSet<>();
     
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<ProductoComentario> comentarios;
+    
     public User() {
 
     }
@@ -161,5 +165,13 @@ public class User extends DateAudit {
 
     public void setShoppingCart(Set<ShoppingCart> shoppingCart) {
         this.shoppingCart = shoppingCart;
+    }
+
+    public Set<ProductoComentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(Set<ProductoComentario> comentarios) {
+        this.comentarios = comentarios;
     }
 }

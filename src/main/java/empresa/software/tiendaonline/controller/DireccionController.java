@@ -3,15 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package empresa.software.tiendaonline.model;
+package empresa.software.tiendaonline.controller;
 
 /**
  *
  * @author pedro
  */
-public enum TipoTiendaName {
-    ROPA_DEPORTIVA,
-    ELECTRONICA,
-    ALIMENTOS,
-    JUGUETES
+public class DireccionController {
+    
 }

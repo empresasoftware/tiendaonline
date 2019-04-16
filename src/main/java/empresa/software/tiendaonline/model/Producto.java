@@ -19,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
@@ -43,25 +44,40 @@ public class Producto extends DateAudit {
     @Size(max = 100)
     private String descripcion;
     
+    @NotBlank
+    @Size(max = 100)
+    private String imagenPrincipal;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tienda_id", nullable = false)
+    @JsonIgnore
     private Tienda tienda;
+    
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "categoria_id", nullable = false)
+    private Categoria categoria;
     
    @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "producto")
+    @JsonIgnore
     private Set<ImagenProducto> imagenes = new HashSet<>();
    
     @OneToMany(mappedBy = "producto", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<ShoppingCart> shoppingCart = new HashSet<>();
+    
+    @OneToMany(mappedBy = "producto", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<ProductoComentario> comentarios;
 
     public Producto() {
     }
 
-    public Producto(String nombre, String descripcion, Tienda tienda) {
+    public Producto(String nombre, String descripcion, String imagenPrincipal, Tienda tienda) {
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.imagenPrincipal = imagenPrincipal;
         this.tienda = tienda;
     }   
    
@@ -111,6 +127,30 @@ public class Producto extends DateAudit {
 
     public void setShoppingCart(Set<ShoppingCart> shoppingCart) {
         this.shoppingCart = shoppingCart;
+    }
+
+    public Set<ProductoComentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(Set<ProductoComentario> comentarios) {
+        this.comentarios = comentarios;
+    }
+
+    public String getImagenPrincipal() {
+        return imagenPrincipal;
+    }
+
+    public void setImagenPrincipal(String imagenPrincipal) {
+        this.imagenPrincipal = imagenPrincipal;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
    
    
