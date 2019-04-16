@@ -5,7 +5,10 @@
  */
 package empresa.software.tiendaonline.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import empresa.software.tiendaonline.model.audit.DateAudit;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -28,7 +31,8 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "tiendas")
-public class Tienda extends DateAudit{
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Tienda extends DateAudit implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,11 +57,13 @@ public class Tienda extends DateAudit{
             fetch = FetchType.LAZY,
             orphanRemoval = true)
    @JoinColumn(name = "tienda_id")
+   @JsonIgnore
     private Set<Direccion> direcciones = new HashSet<>();
 
    @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             mappedBy = "tienda")
+   @JsonIgnore
     private Set<Producto> productos = new HashSet<>();
 
     public Tienda() {

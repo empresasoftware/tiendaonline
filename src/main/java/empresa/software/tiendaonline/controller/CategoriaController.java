@@ -29,7 +29,7 @@ public class CategoriaController {
     @Autowired
     CategoriaRepository categoriaRepository;
 
-    @Secured({"ROLE_USER"})
+    @Secured({"ROLE_SHOP"})
     @PostMapping
     public Categoria newCategoria(@Valid @RequestBody CategoriaRequest categoriaRequest) {
         Categoria categoria;

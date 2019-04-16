@@ -6,6 +6,7 @@
 package empresa.software.tiendaonline.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,7 +24,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "images_producto")
-public class ImagenProducto {
+public class ImagenProducto implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
