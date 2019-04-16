@@ -51,7 +51,8 @@ public class Tienda extends DateAudit{
     
    @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
-            mappedBy = "tienda")
+            orphanRemoval = true)
+   @JoinColumn(name = "tienda_id")
     private Set<Direccion> direcciones = new HashSet<>();
 
    @OneToMany(cascade = CascadeType.ALL,

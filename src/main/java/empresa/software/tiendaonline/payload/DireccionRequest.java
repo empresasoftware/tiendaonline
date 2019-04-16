@@ -3,55 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package empresa.software.tiendaonline.model;
+package empresa.software.tiendaonline.payload;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 /**
  *
  * @author pedro
  */
-@Entity
-@Table(name = "direcciones")
-public class Direccion implements Serializable {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class DireccionRequest {
     
     @NotBlank
     @Size(max = 255)
-    @Column(name = "calle_principal")
     private String callePrincipal;
     
     @NotBlank
     @Size(max = 255)
-    @Column(name = "calle_secundaria")
     private String calleSecundaria;
     
     @NotBlank
     @Size(max = 255)
-    @Column(name = "descripcion_ubicacion")
     private String descripcionUbicacion;
     
     @NotBlank
@@ -74,30 +46,9 @@ public class Direccion implements Serializable {
     @Size(max = 20)
     private String numeroTelefono;
    
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tipo_direccion_id", referencedColumnName = "id")
-    private TipoDireccion tipoDireccion;
-
-    public Direccion() {
-    }
-
-    public Direccion(String callePrincipal, String calleSecundaria, String descripcionUbicacion, String pais, String provincia, String ciudad, String codigoZipPostal, String numeroTelefono, TipoDireccion tipoDireccion) {
-        this.callePrincipal = callePrincipal;
-        this.calleSecundaria = calleSecundaria;
-        this.descripcionUbicacion = descripcionUbicacion;
-        this.pais = pais;
-        this.provincia = provincia;
-        this.ciudad = ciudad;
-        this.codigoZipPostal = codigoZipPostal;
-        this.numeroTelefono = numeroTelefono;
-        this.tipoDireccion = tipoDireccion;
-    }
-    
-    
-
-    public Long getId() {
-        return id;
-    }
+    @NotBlank
+    @Size(max = 20)
+    private String tipoDireccion;
 
     public String getCallePrincipal() {
         return callePrincipal;
@@ -131,12 +82,8 @@ public class Direccion implements Serializable {
         return numeroTelefono;
     }
 
-    public TipoDireccion getTipoDireccion() {
+    public String getTipoDireccion() {
         return tipoDireccion;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setCallePrincipal(String callePrincipal) {
@@ -171,8 +118,7 @@ public class Direccion implements Serializable {
         this.numeroTelefono = numeroTelefono;
     }
 
-    public void setTipoDireccion(TipoDireccion tipoDireccion) {
+    public void setTipoDireccion(String tipoDireccion) {
         this.tipoDireccion = tipoDireccion;
     }
-
 }

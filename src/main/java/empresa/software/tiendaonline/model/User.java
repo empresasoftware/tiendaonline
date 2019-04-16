@@ -83,6 +83,11 @@ public class User extends DateAudit {
     @JsonIgnore
     private Set<ProductoComentario> comentarios;
     
+   @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true)
+    private Set<Direccion> direcciones = new HashSet<>();
+    
     public User() {
 
     }
@@ -173,5 +178,13 @@ public class User extends DateAudit {
 
     public void setComentarios(Set<ProductoComentario> comentarios) {
         this.comentarios = comentarios;
+    }
+
+    public Set<Direccion> getDirecciones() {
+        return direcciones;
+    }
+
+    public void setDirecciones(Set<Direccion> direcciones) {
+        this.direcciones = direcciones;
     }
 }

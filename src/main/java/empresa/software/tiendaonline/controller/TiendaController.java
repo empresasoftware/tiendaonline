@@ -78,7 +78,7 @@ public class TiendaController {
     }
 
     @GetMapping("/id/{id}")
-    public Tienda getTiendaShopname(@CurrentUser UserPrincipal userprincipal, @PathVariable Long id) {
+    public Tienda getTiendaId(@CurrentUser UserPrincipal userprincipal, @PathVariable Long id) {
         return tiendaRepository.findById(id).get();
     }
 
@@ -121,7 +121,7 @@ public class TiendaController {
     }
 
     @Secured({"ROLE_SHOP"})
-    @PostMapping("/actualizar")
+    @PutMapping
     public ResponseEntity<?> actualizarTienda(@CurrentUser UserPrincipal userprincipal, @Valid @RequestBody TiendaRequest tiendaRequest) {
         Vendedor vendedor = (Vendedor) userRepository.findById(userprincipal.getId()).get();
 
