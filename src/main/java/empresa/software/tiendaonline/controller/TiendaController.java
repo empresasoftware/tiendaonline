@@ -90,7 +90,7 @@ public class TiendaController {
     }
 
     @Secured({"ROLE_SHOP"})
-    @PostMapping
+    @PostMapping("/registrar")
     public ResponseEntity<?> nuevaTienda(@CurrentUser UserPrincipal userprincipal, @Valid @RequestBody TiendaRequest tiendaRequest) {
         Vendedor vendedor = (Vendedor) userRepository.findById(userprincipal.getId()).get();
 
@@ -121,7 +121,7 @@ public class TiendaController {
     }
 
     @Secured({"ROLE_SHOP"})
-    @PutMapping
+    @PutMapping("/actualizar")
     public ResponseEntity<?> actualizarTienda(@CurrentUser UserPrincipal userprincipal, @Valid @RequestBody TiendaRequest tiendaRequest) {
         Vendedor vendedor = (Vendedor) userRepository.findById(userprincipal.getId()).get();
 
@@ -184,7 +184,7 @@ public class TiendaController {
         return ResponseEntity.created(location).body(new ApiResponse(true, "Tienda registered successfully"));
     }
     @Secured({"ROLE_SHOP"})
-    @PutMapping("/logoTienda")
+    @PutMapping("/logo")
     public ResponseEntity<?> uploadLogoTienda(@CurrentUser UserPrincipal userprincipal,
             @RequestParam("file") MultipartFile file) {
         Vendedor vendedor = vendedorRepository.findById(userprincipal.getId()).get();

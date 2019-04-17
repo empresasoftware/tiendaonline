@@ -20,6 +20,10 @@ public class TiendaRequest {
     @NotBlank
     @Size(max = 15)
     private String shopname;
+    
+    @NotBlank
+    @Size(max = 500)
+    private String descripcion;
 
     @NotBlank
     @Size(max = 60)
@@ -47,6 +51,14 @@ public class TiendaRequest {
 
     public void setTipoTienda(String tipoTienda) {
         this.tipoTienda = tipoTienda;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
     
 }

@@ -32,7 +32,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "tiendas")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Tienda extends DateAudit implements Serializable {
+public class Tienda extends DateAudit{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,15 +45,19 @@ public class Tienda extends DateAudit implements Serializable {
     @Size(max = 20)
     private String shopname;
 
+    @NotBlank
+    @Size(max = 500)
+    private String descripcion;
+
     //@NotBlank
     @Size(max = 200)
     private String logo;
     
-    @OneToOne(cascade = CascadeType.ALL,  optional = false)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tipo_tienda_id", referencedColumnName = "id", nullable = false)
     private TipoTienda tipoTienda;
     
-   @OneToMany(cascade = CascadeType.ALL,
+    @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
             orphanRemoval = true)
    @JoinColumn(name = "tienda_id")
@@ -136,5 +140,13 @@ public class Tienda extends DateAudit implements Serializable {
 
     public void setProductos(Set<Producto> productos) {
         this.productos = productos;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }
