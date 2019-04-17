@@ -108,7 +108,14 @@ public class TiendaController {
 
         TipoTienda tipoTienda = tipoTiendaRepository.findByName(tipoTiendaName)
                 .orElseThrow(() -> new AppException("Tipo Tienda not set."));
-        Tienda tienda = new Tienda(tiendaRequest.getName(), tiendaRequest.getShopname(), tiendaRequest.getDescripcion(), tipoTienda);
+        Tienda tienda = vendedor.getTienda();
+        if (tienda == null ){
+            tienda = new Tienda(tiendaRequest.getName(), tiendaRequest.getShopname(), tiendaRequest.getDescripcion(), tipoTienda);
+        }
+        else{
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "La tienda ya ha sido creada!"));
+
+        }
         tiendaRepository.save(tienda);
         vendedor.setTienda(tienda);
         vendedorRepository.save(vendedor);
@@ -140,6 +147,10 @@ public class TiendaController {
         TipoTienda tipoTienda = tipoTiendaRepository.findByName(tipoTiendaName)
                 .orElseThrow(() -> new AppException("Tipo Tienda not set."));
         Tienda tienda = vendedor.getTienda();
+        
+        if (tienda == null) {
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "Primero debe crear la tienda!"));
+        }
         
         tienda.setName(tiendaRequest.getName());
         tienda.setShopname(tiendaRequest.getShopname());
