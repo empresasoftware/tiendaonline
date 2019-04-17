@@ -108,7 +108,7 @@ public class TiendaController {
 
         TipoTienda tipoTienda = tipoTiendaRepository.findByName(tipoTiendaName)
                 .orElseThrow(() -> new AppException("Tipo Tienda not set."));
-        Tienda tienda = new Tienda(tiendaRequest.getName(), tiendaRequest.getShopname(), tipoTienda);
+        Tienda tienda = new Tienda(tiendaRequest.getName(), tiendaRequest.getShopname(), tiendaRequest.getDescripcion(), tipoTienda);
         tiendaRepository.save(tienda);
         vendedor.setTienda(tienda);
         vendedorRepository.save(vendedor);
@@ -142,9 +142,10 @@ public class TiendaController {
         Tienda tienda = vendedor.getTienda();
         
         tienda.setName(tiendaRequest.getName());
-        tienda.setTipoTienda(tipoTienda);
         tienda.setShopname(tiendaRequest.getShopname());
-        
+        tienda.setDescripcion(tiendaRequest.getDescripcion());
+        tienda.setTipoTienda(tipoTienda);
+
         vendedor.setTienda(tienda);
         vendedorRepository.save(vendedor);
         
@@ -173,7 +174,7 @@ public class TiendaController {
         
         String urlLogo = fileStorageService.storeFile(file);
         
-        Tienda tienda = new Tienda(tiendaRequest.getName(), tiendaRequest.getShopname(), urlLogo , tipoTienda);
+        Tienda tienda = new Tienda(tiendaRequest.getName(), tiendaRequest.getShopname(),tiendaRequest.getDescripcion() ,urlLogo , tipoTienda);
         vendedor.setTienda(tienda);
         vendedorRepository.save(vendedor);
         

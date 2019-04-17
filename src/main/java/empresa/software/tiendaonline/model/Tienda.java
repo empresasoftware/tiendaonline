@@ -73,18 +73,21 @@ public class Tienda extends DateAudit{
     public Tienda() {
     }
 
-    public Tienda(String name, String shopname, TipoTienda tipoTienda) {
+    public Tienda(String name, String shopname, String descripcion, TipoTienda tipoTienda) {
         this.name = name;
         this.shopname = shopname;
+        this.descripcion = descripcion;
         this.tipoTienda = tipoTienda;
     }
-    
-    public Tienda(String name, String shopname, String logo, TipoTienda tipoTienda) {
+
+    public Tienda(String name, String shopname, String descripcion, String logo, TipoTienda tipoTienda) {
         this.name = name;
         this.shopname = shopname;
+        this.descripcion = descripcion;
         this.logo = logo;
         this.tipoTienda = tipoTienda;
     }
+    
 
     public Long getId() {
         return id;
