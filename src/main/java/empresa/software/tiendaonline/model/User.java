@@ -81,6 +81,14 @@ public class User extends DateAudit {
     
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
+    private Set<RatingProducto> ratingProductos;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<RatingTienda> ratingTiendas;
+    
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<ProductoComentario> comentarios;
     
    @OneToMany(cascade = CascadeType.ALL,
@@ -186,5 +194,21 @@ public class User extends DateAudit {
 
     public void setDirecciones(Set<Direccion> direcciones) {
         this.direcciones = direcciones;
+    }
+
+    public Set<RatingProducto> getRatingProductos() {
+        return ratingProductos;
+    }
+
+    public void setRatingProductos(Set<RatingProducto> ratingProductos) {
+        this.ratingProductos = ratingProductos;
+    }
+
+    public Set<RatingTienda> getRatingTiendas() {
+        return ratingTiendas;
+    }
+
+    public void setRatingTiendas(Set<RatingTienda> ratingTiendas) {
+        this.ratingTiendas = ratingTiendas;
     }
 }

@@ -7,6 +7,8 @@ package empresa.software.tiendaonline.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import empresa.software.tiendaonline.model.audit.DateAudit;
+import empresa.software.tiendaonline.model.RatingResume;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -22,6 +24,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -44,9 +48,23 @@ public class Producto extends DateAudit {
     @Size(max = 100)
     private String descripcion;
     
+//    @Digits(integer=6, fraction=2)
+//    @Min(0)
+//    private BigDecimal precio;
+//    
+//    private int cantidad;
+    
     @NotBlank
     @Size(max = 100)
     private String imagenPrincipal;
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "estado_producto_id", referencedColumnName = "id", nullable = false)
+    private EstadoProducto estadoProducto;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "rating_resume_producto_id", referencedColumnName = "id")
+    private RatingResume ratingResume;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tienda_id", nullable = false)
@@ -66,6 +84,10 @@ public class Producto extends DateAudit {
     @OneToMany(mappedBy = "producto", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<ShoppingCart> shoppingCart = new HashSet<>();
+    
+    @OneToMany(mappedBy = "producto", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<RatingProducto> ratings;
     
     @OneToMany(mappedBy = "producto", fetch = FetchType.LAZY)
     @JsonIgnore
@@ -151,6 +173,30 @@ public class Producto extends DateAudit {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public EstadoProducto getEstadoProducto() {
+        return estadoProducto;
+    }
+
+    public RatingResume getRatingResume() {
+        return ratingResume;
+    }
+
+    public void setEstadoProducto(EstadoProducto estadoProducto) {
+        this.estadoProducto = estadoProducto;
+    }
+
+    public void setRatingResume(RatingResume ratingResume) {
+        this.ratingResume = ratingResume;
+    }
+
+    public Set<RatingProducto> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<RatingProducto> ratings) {
+        this.ratings = ratings;
     }
    
    

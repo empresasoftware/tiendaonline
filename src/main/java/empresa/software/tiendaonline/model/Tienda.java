@@ -70,6 +70,10 @@ public class Tienda extends DateAudit{
    @JsonIgnore
     private Set<Producto> productos = new HashSet<>();
 
+    @OneToMany(mappedBy = "tienda", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<RatingTienda> ratings;
+   
     public Tienda() {
     }
 
@@ -151,5 +155,13 @@ public class Tienda extends DateAudit{
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public Set<RatingTienda> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<RatingTienda> ratings) {
+        this.ratings = ratings;
     }
 }

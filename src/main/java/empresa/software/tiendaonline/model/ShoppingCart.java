@@ -5,6 +5,8 @@
  */
 package empresa.software.tiendaonline.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.EmbeddedId;
@@ -20,14 +22,17 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "shopping_cart")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ShoppingCart implements Serializable {
     
     @EmbeddedId
+    @JsonIgnore
     private ShoppingCartKey id;
  
     @ManyToOne
     @MapsId("user_id")
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
  
     @ManyToOne
