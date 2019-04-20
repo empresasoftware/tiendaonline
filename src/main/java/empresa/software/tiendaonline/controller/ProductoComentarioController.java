@@ -62,7 +62,7 @@ public class ProductoComentarioController {
     }
 
     @Secured({"ROLE_USER"})
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/actualizar")
     public ResponseEntity<?> updateComentario(@CurrentUser UserPrincipal userprincipal, @PathVariable Long id, @Valid @RequestBody ComentarioRequest comentarioRequest) {
         
         ProductoComentario productoComentario = productoComentarioRepository.findById(id).get();
@@ -80,7 +80,7 @@ public class ProductoComentarioController {
     }
     
     @Secured({"ROLE_USER"})
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/eliminar")
     public ResponseEntity<?> deleteComentario(@CurrentUser UserPrincipal userprincipal, @PathVariable Long id) {
         ProductoComentario productoComentario = productoComentarioRepository.findById(id).get();
         if (productoComentario.getUser().getUsername().equals(userprincipal.getUsername())) {

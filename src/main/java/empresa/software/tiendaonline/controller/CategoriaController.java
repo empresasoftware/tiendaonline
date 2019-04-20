@@ -30,7 +30,7 @@ public class CategoriaController {
     CategoriaRepository categoriaRepository;
 
     @Secured({"ROLE_SHOP"})
-    @PostMapping
+    @PostMapping("/nuevo")
     public Categoria newCategoria(@Valid @RequestBody CategoriaRequest categoriaRequest) {
         Categoria categoria;
         Categoria parent;

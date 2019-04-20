@@ -75,7 +75,7 @@ public class Direccion implements Serializable {
     private String numeroTelefono;
    
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tipo_direccion_id", referencedColumnName = "id")
+    @JoinColumn(name = "tipo_direccion_id", referencedColumnName = "id", nullable = false)
     private TipoDireccion tipoDireccion;
 
     public Direccion() {

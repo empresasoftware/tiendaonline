@@ -5,9 +5,12 @@
  */
 package empresa.software.tiendaonline.repository;
 
+import empresa.software.tiendaonline.model.Categoria;
 import empresa.software.tiendaonline.model.Tienda;
 import empresa.software.tiendaonline.model.Producto;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -16,4 +19,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
     List<Producto> findByTienda(Tienda tienda);
+    Page<Producto> findByCategoria(Categoria categoria, Pageable pageable);
 }

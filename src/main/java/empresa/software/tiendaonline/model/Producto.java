@@ -59,6 +59,10 @@ public class Producto extends DateAudit {
     private String imagenPrincipal;
     
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "categoria_producto_id", referencedColumnName = "id", nullable = false)
+    private Categoria categoriaProducto;
+    
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "estado_producto_id", referencedColumnName = "id", nullable = false)
     private EstadoProducto estadoProducto;
 
@@ -96,10 +100,11 @@ public class Producto extends DateAudit {
     public Producto() {
     }
 
-    public Producto(String nombre, String descripcion, String imagenPrincipal, Tienda tienda) {
+    public Producto(String nombre, String descripcion, String imagenPrincipal, Categoria categoriaProducto, Tienda tienda) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.imagenPrincipal = imagenPrincipal;
+        this.categoriaProducto = categoriaProducto;
         this.tienda = tienda;
     }   
    
@@ -197,6 +202,14 @@ public class Producto extends DateAudit {
 
     public void setRatings(Set<RatingProducto> ratings) {
         this.ratings = ratings;
+    }
+
+    public Categoria getCategoriaProducto() {
+        return categoriaProducto;
+    }
+
+    public void setCategoriaProducto(Categoria categoriaProducto) {
+        this.categoriaProducto = categoriaProducto;
     }
    
    

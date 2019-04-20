@@ -22,6 +22,8 @@ public class ProductoRequest {
     @Size(max = 100)
     private String descripcion;
 
+    private Long categoria;
+
     public String getNombre() {
         return nombre;
     }
@@ -36,5 +38,13 @@ public class ProductoRequest {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public Long getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Long categoria) {
+        this.categoria = categoria;
     }
 }

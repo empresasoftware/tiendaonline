@@ -31,7 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author pedro
  */
 @RestController
-@RequestMapping("/api/imagenes/productos")
+@RequestMapping("/api/productos")
 public class ImagenProductoController {
     @Autowired
     ProductoRepository productoRepository;
@@ -43,7 +43,7 @@ public class ImagenProductoController {
     FileStorageService fileStorageService;
     
     @Secured({"ROLE_SHOP"})
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/imagenes/nuevo")
     public ResponseEntity<?> newImagenProducto(@CurrentUser UserPrincipal userprincipal, @PathVariable Long id,
             @RequestParam("file") MultipartFile file) {
         Producto producto = productoRepository.findById(id).get();
@@ -54,7 +54,7 @@ public class ImagenProductoController {
                 HttpStatus.ACCEPTED);
     }
     
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/imagenes")
     public List<ImagenProducto> getImagenProductoAll(@CurrentUser UserPrincipal userprincipal, @PathVariable Long id) {
         Producto producto = productoRepository.findById(id).get();             
         return imagenProductoRepository.findByProducto(producto);
