@@ -63,7 +63,7 @@ public class Producto extends DateAudit {
     private EstadoProducto estadoProducto;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "rating_resume_producto_id", referencedColumnName = "id")
+    @JoinColumn(name = "rating_resume_producto_id", referencedColumnName = "id",  nullable = false)
     private RatingResume ratingResume;
     
     @ManyToOne(fetch = FetchType.LAZY)
@@ -96,12 +96,14 @@ public class Producto extends DateAudit {
     public Producto() {
     }
 
-    public Producto(String nombre, String descripcion, String imagenPrincipal, Categoria categoria, Tienda tienda) {
+    public Producto(String nombre, String descripcion, String imagenPrincipal, Categoria categoria, Tienda tienda, EstadoProducto estadoProducto, RatingResume ratingResume) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.imagenPrincipal = imagenPrincipal;
         this.categoria = categoria;
         this.tienda = tienda;
+        this.estadoProducto = estadoProducto;
+        this.ratingResume = ratingResume;
     }   
    
     public Long getId() {

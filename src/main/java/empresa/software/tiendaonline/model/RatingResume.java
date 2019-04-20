@@ -26,6 +26,14 @@ public class RatingResume {
     
     private long numeroUsuarios; 
 
+    public RatingResume() {
+    }
+
+    public RatingResume(float estrellas, long numeroUsuarios) {
+        this.estrellas = estrellas;
+        this.numeroUsuarios = numeroUsuarios;
+    }
+
     public Long getId() {
         return id;
     }

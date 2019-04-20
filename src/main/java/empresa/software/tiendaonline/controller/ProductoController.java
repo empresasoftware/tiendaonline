@@ -5,13 +5,20 @@
  */
 package empresa.software.tiendaonline.controller;
 
+import empresa.software.tiendaonline.exception.AppException;
 import empresa.software.tiendaonline.model.Producto;
 import empresa.software.tiendaonline.model.Categoria;
+import empresa.software.tiendaonline.model.EstadoProducto;
+import empresa.software.tiendaonline.model.EstadoProductoName;
+import empresa.software.tiendaonline.model.RatingResume;
 import empresa.software.tiendaonline.model.Tienda;
+import empresa.software.tiendaonline.model.TipoTienda;
+import empresa.software.tiendaonline.model.TipoTiendaName;
 import empresa.software.tiendaonline.model.Vendedor;
 import empresa.software.tiendaonline.payload.ApiResponse;
 import empresa.software.tiendaonline.payload.ProductoRequest;
 import empresa.software.tiendaonline.repository.CategoriaRepository;
+import empresa.software.tiendaonline.repository.EstadoProductoRepository;
 import empresa.software.tiendaonline.repository.ProductoRepository;
 import empresa.software.tiendaonline.repository.TiendaRepository;
 import empresa.software.tiendaonline.repository.VendedorRepository;
@@ -53,6 +60,9 @@ public class ProductoController {
 
     @Autowired
     CategoriaRepository categoriaRepository;
+
+    @Autowired
+    EstadoProductoRepository estadoProductoRepository;
     
     @Autowired
     FileStorageService fileStorageService;
@@ -79,7 +89,10 @@ public class ProductoController {
         //String urlImagenPrincipal = fileStorageService.storeFile(file);
         String urlImagenPrincipal = "https://res.cloudinary.com/hv7wxttwe/image/upload/v1555426080/default-product-image.png";
         Categoria categoria = categoriaRepository.findById(productoRequest.getCategoria()).get();
-        Producto producto = new Producto(productoRequest.getNombre(), productoRequest.getDescripcion(), urlImagenPrincipal, categoria, tienda);
+        EstadoProductoName estadoProductoName = EstadoProductoName.IN_STOCK;
+        EstadoProducto estado = estadoProductoRepository.findByName(estadoProductoName).get();
+        RatingResume ratingResume = new RatingResume(0, 0);
+        Producto producto = new Producto(productoRequest.getNombre(), productoRequest.getDescripcion(), urlImagenPrincipal, categoria, tienda, estado ,ratingResume);
         productoRepository.save(producto);
 
         return producto;
@@ -87,12 +100,29 @@ public class ProductoController {
     
     @Secured({"ROLE_SHOP"})
     @PutMapping("/{id}/actualizar")
-    public ResponseEntity<?> updateProducto(@CurrentUser UserPrincipal userprincipal, @RequestParam("id") Long id, @Valid @RequestBody ProductoRequest productoRequest, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> updateProducto(@CurrentUser UserPrincipal userprincipal, @RequestParam("id") Long id, @Valid @RequestBody ProductoRequest productoRequest) {
         Categoria categoria = categoriaRepository.findById(productoRequest.getCategoria()).get();
+        
+        EstadoProductoName estadoProductoName = null;
+        for (EstadoProductoName myVar : EstadoProductoName.values()) {
+            if (myVar.toString().equals(productoRequest.getEstado())){
+                estadoProductoName = myVar;
+            }
+        }
+        
+        if (estadoProductoName == null){
+            return new ResponseEntity(new ApiResponse(false, "EstadoProducto Error!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+        
+        EstadoProducto estadoProducto = estadoProductoRepository.findByName(estadoProductoName)
+                .orElseThrow(() -> new AppException("Estado Producto not set."));
+        
         Producto producto = productoRepository.findById(id).get();
         producto.setNombre(productoRequest.getNombre());
         producto.setDescripcion(productoRequest.getDescripcion());
         producto.setCategoria(categoria);
+        producto.setEstadoProducto(estadoProducto);
         productoRepository.save(producto);
 
         return new ResponseEntity(new ApiResponse(true, "Producto Actualizado"),

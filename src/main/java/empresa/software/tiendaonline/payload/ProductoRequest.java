@@ -24,6 +24,8 @@ public class ProductoRequest {
 
     private Long categoria;
 
+    private String estado;
+
     public String getNombre() {
         return nombre;
     }
@@ -46,5 +48,13 @@ public class ProductoRequest {
 
     public void setCategoria(Long categoria) {
         this.categoria = categoria;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }
