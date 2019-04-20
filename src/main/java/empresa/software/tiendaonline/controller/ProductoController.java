@@ -68,13 +68,13 @@ public class ProductoController {
     FileStorageService fileStorageService;
     
     @GetMapping("/{id}")
-    public Producto getProducto(@CurrentUser UserPrincipal userprincipal, @RequestParam("id") Long id) {
+    public Producto getProducto(@CurrentUser UserPrincipal userprincipal, @PathVariable("id") Long id) {
         Producto producto = productoRepository.findById(id).get();
         return producto;
     }
 
     @GetMapping("/categoria/{id}/{page}/{pageSize}")
-    public Page<Producto> getProductoByCategoria(@CurrentUser UserPrincipal userprincipal, @RequestParam("id") Long id, @PathVariable int page, @PathVariable int pageSize) {
+    public Page<Producto> getProductoByCategoria(@CurrentUser UserPrincipal userprincipal, @PathVariable("id") Long id, @PathVariable int page, @PathVariable int pageSize) {
         Categoria categoria = categoriaRepository.findById(id).get();
         Page<Producto> productos = productoRepository.findByCategoria(categoria, PageRequest.of(page, pageSize));
         return productos;
@@ -100,7 +100,7 @@ public class ProductoController {
     
     @Secured({"ROLE_SHOP"})
     @PutMapping("/{id}/actualizar")
-    public ResponseEntity<?> updateProducto(@CurrentUser UserPrincipal userprincipal, @RequestParam("id") Long id, @Valid @RequestBody ProductoRequest productoRequest) {
+    public ResponseEntity<?> updateProducto(@CurrentUser UserPrincipal userprincipal, @PathVariable("id") Long id, @Valid @RequestBody ProductoRequest productoRequest) {
         Categoria categoria = categoriaRepository.findById(productoRequest.getCategoria()).get();
         
         EstadoProductoName estadoProductoName = null;
@@ -130,7 +130,7 @@ public class ProductoController {
     }
     @Secured({"ROLE_SHOP"})
     @PutMapping("/{id}/imagen")
-    public ResponseEntity<?> uploadImagenProducto(@CurrentUser UserPrincipal userprincipal, @RequestParam("id") Long id,
+    public ResponseEntity<?> uploadImagenProducto(@CurrentUser UserPrincipal userprincipal, @PathVariable("id") Long id,
             @RequestParam("file") MultipartFile file) {
         Producto producto = productoRepository.findById(id).get();
         String urlLogo = fileStorageService.storeFile(file);
