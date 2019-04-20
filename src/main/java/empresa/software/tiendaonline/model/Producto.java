@@ -45,7 +45,7 @@ public class Producto extends DateAudit {
     private String nombre;
 
     @NotBlank
-    @Size(max = 100)
+    @Size(max = 250)
     private String descripcion;
     
 //    @Digits(integer=6, fraction=2)
@@ -57,10 +57,6 @@ public class Producto extends DateAudit {
     @NotBlank
     @Size(max = 100)
     private String imagenPrincipal;
-    
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "categoria_producto_id", referencedColumnName = "id", nullable = false)
-    private Categoria categoriaProducto;
     
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "estado_producto_id", referencedColumnName = "id", nullable = false)
@@ -100,11 +96,11 @@ public class Producto extends DateAudit {
     public Producto() {
     }
 
-    public Producto(String nombre, String descripcion, String imagenPrincipal, Categoria categoriaProducto, Tienda tienda) {
+    public Producto(String nombre, String descripcion, String imagenPrincipal, Categoria categoria, Tienda tienda) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.imagenPrincipal = imagenPrincipal;
-        this.categoriaProducto = categoriaProducto;
+        this.categoria = categoria;
         this.tienda = tienda;
     }   
    
@@ -203,14 +199,4 @@ public class Producto extends DateAudit {
     public void setRatings(Set<RatingProducto> ratings) {
         this.ratings = ratings;
     }
-
-    public Categoria getCategoriaProducto() {
-        return categoriaProducto;
-    }
-
-    public void setCategoriaProducto(Categoria categoriaProducto) {
-        this.categoriaProducto = categoriaProducto;
-    }
-   
-   
 }
