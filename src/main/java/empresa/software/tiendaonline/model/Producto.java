@@ -74,7 +74,7 @@ public class Producto extends DateAudit {
     @JsonIgnore
     private Tienda tienda;
     
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
     
