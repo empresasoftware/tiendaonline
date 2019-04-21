@@ -18,6 +18,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author pedro
  */
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
-    List<Producto> findByTienda(Tienda tienda);
+    Page<Producto> findByTienda(Tienda tienda, Pageable pageable);
     Page<Producto> findByCategoria(Categoria categoria, Pageable pageable);
 }

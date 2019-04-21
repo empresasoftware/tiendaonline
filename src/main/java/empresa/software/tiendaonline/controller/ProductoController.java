@@ -6,6 +6,7 @@
 package empresa.software.tiendaonline.controller;
 
 import empresa.software.tiendaonline.exception.AppException;
+import empresa.software.tiendaonline.exception.ResourceNotFoundException;
 import empresa.software.tiendaonline.model.Producto;
 import empresa.software.tiendaonline.model.Categoria;
 import empresa.software.tiendaonline.model.EstadoProducto;
@@ -68,8 +69,9 @@ public class ProductoController {
     FileStorageService fileStorageService;
     
     @GetMapping("/{id}")
-    public Producto getProducto(@CurrentUser UserPrincipal userprincipal, @PathVariable("id") Long id) {
-        Producto producto = productoRepository.findById(id).get();
+    public Producto getProducto(@PathVariable("id") Long id) {
+        Producto producto = productoRepository.getOne(id);
+               // .orElseThrow(() -> new ResourceNotFoundException("Producto", "id", id));
         return producto;
     }
 
@@ -93,7 +95,7 @@ public class ProductoController {
         EstadoProducto estado = estadoProductoRepository.findByName(estadoProductoName).get();
         RatingResume ratingResume = new RatingResume(0, 0);
         Producto producto = new Producto(productoRequest.getNombre(), productoRequest.getDescripcion(), urlImagenPrincipal, categoria, tienda, estado ,ratingResume);
-        productoRepository.save(producto);
+        producto = productoRepository.save(producto);
 
         return producto;
     }

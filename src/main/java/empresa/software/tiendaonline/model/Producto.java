@@ -6,8 +6,10 @@
 package empresa.software.tiendaonline.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import empresa.software.tiendaonline.model.audit.DateAudit;
 import empresa.software.tiendaonline.model.RatingResume;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,6 +37,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "productos")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Producto extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
