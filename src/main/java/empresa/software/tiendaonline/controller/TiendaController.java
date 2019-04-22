@@ -164,8 +164,51 @@ public class TiendaController {
     }
 
     @Secured({"ROLE_SHOP"})
+    @PutMapping("/actualizarAll")
+    public ResponseEntity<?> actualizarTienda(@CurrentUser UserPrincipal userprincipal, @Valid @RequestBody TiendaRequest tiendaRequest, @RequestParam("logo") MultipartFile file) {
+        Vendedor vendedor = (Vendedor) userRepository.findById(userprincipal.getId()).get();
+
+        TipoTiendaName tipoTiendaName = null;
+        for (TipoTiendaName myVar : TipoTiendaName.values()) {
+            if (myVar.toString().equals(tiendaRequest.getTipoTienda())){
+                tipoTiendaName = myVar;
+            }
+        }
+        
+        if (tipoTiendaName == null){
+            return new ResponseEntity(new ApiResponse(false, "TipoTienda Error!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        TipoTienda tipoTienda = tipoTiendaRepository.findByName(tipoTiendaName)
+                .orElseThrow(() -> new AppException("Tipo Tienda not set."));
+        Tienda tienda = vendedor.getTienda();
+        
+        if (tienda == null) {
+            return ResponseEntity.badRequest().body(new ApiResponse(false, "Primero debe crear la tienda!"));
+        }
+        
+        String urlLogo = null;
+        if (tienda.getLogo() == null){        
+            urlLogo    = fileStorageService.storeFile(file);
+        }else{
+            urlLogo    = fileStorageService.storeFile(file, tienda.getLogo() );
+        }
+        tienda.setName(tiendaRequest.getName());
+        tienda.setShopname(tiendaRequest.getShopname());
+        tienda.setDescripcion(tiendaRequest.getDescripcion());
+        tienda.setTipoTienda(tipoTienda);
+        tienda.setLogo(urlLogo);
+
+        vendedor.setTienda(tienda);
+        vendedorRepository.save(vendedor);
+        
+        return ResponseEntity.ok().body(new ApiResponse(true, "Tienda updated successfully"));
+    }
+
+    @Secured({"ROLE_SHOP"})
     @PostMapping("/registrarAll")
-    public ResponseEntity<?> nuevaTienda(@CurrentUser UserPrincipal userprincipal, @Valid @RequestBody TiendaRequest tiendaRequest, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> nuevaTienda(@CurrentUser UserPrincipal userprincipal, @Valid @RequestBody TiendaRequest tiendaRequest, @RequestParam("logo") MultipartFile file) {
         Vendedor vendedor = (Vendedor) userRepository.findById(userprincipal.getId()).get();
 
         TipoTiendaName tipoTiendaName = null;
@@ -198,7 +241,7 @@ public class TiendaController {
     @Secured({"ROLE_SHOP"})
     @PutMapping("/logo")
     public ResponseEntity<?> uploadLogoTienda(@CurrentUser UserPrincipal userprincipal,
-            @RequestParam("file") MultipartFile file) {
+            @RequestParam("logo") MultipartFile file) {
         Vendedor vendedor = vendedorRepository.findById(userprincipal.getId()).get();
         String urlLogo = fileStorageService.storeFile(file);
         vendedor.getTienda().setLogo(urlLogo);
