@@ -5,6 +5,10 @@
  */
 package empresa.software.tiendaonline.controller;
 
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.databind.util.Converter;
 import empresa.software.tiendaonline.exception.AppException;
 import empresa.software.tiendaonline.exception.ResourceNotFoundException;
 import empresa.software.tiendaonline.model.Tienda;
@@ -20,7 +24,12 @@ import empresa.software.tiendaonline.repository.VendedorRepository;
 import empresa.software.tiendaonline.security.CurrentUser;
 import empresa.software.tiendaonline.security.UserPrincipal;
 import empresa.software.tiendaonline.service.FileStorageService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import java.net.URI;
+
+ import lombok.SneakyThrows;
+
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +38,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -163,9 +173,36 @@ public class TiendaController {
         return ResponseEntity.ok().body(new ApiResponse(true, "Tienda updated successfully"));
     }
 
+    @Component
+    public static class StringToTiendaRequestConverter implements Converter<String, TiendaRequest> {
+
+        @Autowired
+        private ObjectMapper objectMapper;
+
+        @Override
+        @SneakyThrows
+        public TiendaRequest convert(String source) {
+            return objectMapper.readValue(source, TiendaRequest.class);
+        }
+
+        @Override
+        public JavaType getInputType(TypeFactory tf) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public JavaType getOutputType(TypeFactory tf) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+    }
+    
+    
     @Secured({"ROLE_SHOP"})
     @PutMapping("/actualizarAll")
-    public ResponseEntity<?> actualizarTienda(@CurrentUser UserPrincipal userprincipal, @Valid @RequestBody TiendaRequest tiendaRequest, @RequestParam("logo") MultipartFile file) {
+@ApiImplicitParams({
+    @ApiImplicitParam(name = "Authorization", value = "Authorization token", 
+                      required = true, dataType = "string", paramType = "header") })
+    public ResponseEntity<?> actualizarTienda(@CurrentUser UserPrincipal userprincipal, @Valid @RequestParam TiendaRequest tiendaRequest, @RequestParam("logo") MultipartFile file) {
         Vendedor vendedor = (Vendedor) userRepository.findById(userprincipal.getId()).get();
 
         TipoTiendaName tipoTiendaName = null;

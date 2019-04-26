@@ -6,7 +6,7 @@
 package empresa.software.tiendaonline.repository;
 
 import empresa.software.tiendaonline.model.TipoDireccion;
-import empresa.software.tiendaonline.model.TipoTiendaName;
+import empresa.software.tiendaonline.model.TipoDireccionName;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,4 +15,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author pedro
  */
 public interface TipoDireccionRepository extends JpaRepository<TipoDireccion, Long> {
+    Optional<TipoDireccion> findByName(TipoDireccionName tipoDireccionName);
+
 }

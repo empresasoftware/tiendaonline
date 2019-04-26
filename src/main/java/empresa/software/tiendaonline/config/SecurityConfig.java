@@ -90,11 +90,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                         .permitAll()
-                    .antMatchers("/api/auth/**")
+                    .antMatchers("/api/auth/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**")
                         .permitAll()
                     .antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability")
                         .permitAll()
-                    .antMatchers(HttpMethod.GET, "/api/polls/**", "/api/users/**", "/api/comentarios/**","/api/productos/**"
+                    .antMatchers(HttpMethod.GET, "/v2/api-docs", "/api/polls/**", "/api/users/**", "/api/comentarios/**","/api/productos/**"
                     ,"/api/tiendas/**")
                         .permitAll()
                     .anyRequest()

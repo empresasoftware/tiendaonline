@@ -39,6 +39,10 @@ public class Direccion implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    private float latitud;
+    
+    private float longitud;
+        
     @NotBlank
     @Size(max = 255)
     @Column(name = "calle_principal")
@@ -81,7 +85,9 @@ public class Direccion implements Serializable {
     public Direccion() {
     }
 
-    public Direccion(String callePrincipal, String calleSecundaria, String descripcionUbicacion, String pais, String provincia, String ciudad, String codigoZipPostal, String numeroTelefono, TipoDireccion tipoDireccion) {
+    public Direccion(float latitud, float longitud, String callePrincipal, String calleSecundaria, String descripcionUbicacion, String pais, String provincia, String ciudad, String codigoZipPostal, String numeroTelefono, TipoDireccion tipoDireccion) {
+        this.latitud = latitud;
+        this.longitud = longitud;
         this.callePrincipal = callePrincipal;
         this.calleSecundaria = calleSecundaria;
         this.descripcionUbicacion = descripcionUbicacion;
@@ -92,8 +98,6 @@ public class Direccion implements Serializable {
         this.numeroTelefono = numeroTelefono;
         this.tipoDireccion = tipoDireccion;
     }
-    
-    
 
     public Long getId() {
         return id;
@@ -173,6 +177,22 @@ public class Direccion implements Serializable {
 
     public void setTipoDireccion(TipoDireccion tipoDireccion) {
         this.tipoDireccion = tipoDireccion;
+    }
+
+    public float getLatitud() {
+        return latitud;
+    }
+
+    public float getLongitud() {
+        return longitud;
+    }
+
+    public void setLatitud(float latitud) {
+        this.latitud = latitud;
+    }
+
+    public void setLongitud(float longitud) {
+        this.longitud = longitud;
     }
 
 }

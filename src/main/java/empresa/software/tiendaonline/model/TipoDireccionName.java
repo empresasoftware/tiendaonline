@@ -10,5 +10,7 @@ package empresa.software.tiendaonline.model;
  * @author pedro
  */
 public enum TipoDireccionName {
-    Shipping_Address
+    Shipping_Address,
+    Billing_Address,  
+    Normal
 }

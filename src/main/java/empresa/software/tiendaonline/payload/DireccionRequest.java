@@ -14,6 +14,10 @@ import javax.validation.constraints.Size;
  */
 public class DireccionRequest {
     
+    private float latitud;
+    
+    private float longitud;
+    
     @NotBlank
     @Size(max = 255)
     private String callePrincipal;
@@ -46,10 +50,6 @@ public class DireccionRequest {
     @Size(max = 20)
     private String numeroTelefono;
    
-    @NotBlank
-    @Size(max = 20)
-    private String tipoDireccion;
-
     public String getCallePrincipal() {
         return callePrincipal;
     }
@@ -81,11 +81,7 @@ public class DireccionRequest {
     public String getNumeroTelefono() {
         return numeroTelefono;
     }
-
-    public String getTipoDireccion() {
-        return tipoDireccion;
-    }
-
+    
     public void setCallePrincipal(String callePrincipal) {
         this.callePrincipal = callePrincipal;
     }
@@ -117,8 +113,20 @@ public class DireccionRequest {
     public void setNumeroTelefono(String numeroTelefono) {
         this.numeroTelefono = numeroTelefono;
     }
+    
+    public float getLatitud() {
+        return latitud;
+    }
 
-    public void setTipoDireccion(String tipoDireccion) {
-        this.tipoDireccion = tipoDireccion;
+    public float getLongitud() {
+        return longitud;
+    }
+
+    public void setLatitud(float latitud) {
+        this.latitud = latitud;
+    }
+
+    public void setLongitud(float longitud) {
+        this.longitud = longitud;
     }
 }
