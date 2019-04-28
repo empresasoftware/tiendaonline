@@ -259,7 +259,7 @@ public class TiendaController {
     }
 
     @Secured({"ROLE_SHOP"})
-    @PutMapping("/logo2")
+    @PostMapping("/logo2")
     public ResponseEntity<?> uploadLogoTienda(@CurrentUser UserPrincipal userprincipal,
             @Valid @RequestBody LogoRequest LogoRequest) {
         Vendedor vendedor = vendedorRepository.findById(userprincipal.getId()).get();
