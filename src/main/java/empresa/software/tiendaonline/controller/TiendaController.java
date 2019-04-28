@@ -16,6 +16,7 @@ import empresa.software.tiendaonline.model.TipoTienda;
 import empresa.software.tiendaonline.model.TipoTiendaName;
 import empresa.software.tiendaonline.model.Vendedor;
 import empresa.software.tiendaonline.payload.ApiResponse;
+import empresa.software.tiendaonline.payload.LogoRequest;
 import empresa.software.tiendaonline.payload.TiendaRequest;
 import empresa.software.tiendaonline.payload.URLImagenRequest;
 import empresa.software.tiendaonline.repository.TiendaRepository;
@@ -260,9 +261,9 @@ public class TiendaController {
     @Secured({"ROLE_SHOP"})
     @PutMapping("/logo2")
     public ResponseEntity<?> uploadLogoTienda(@CurrentUser UserPrincipal userprincipal,
-            @Valid @RequestBody URLImagenRequest tiendaImagenRequest) {
+            @Valid @RequestBody LogoRequest LogoRequest) {
         Vendedor vendedor = vendedorRepository.findById(userprincipal.getId()).get();
-        vendedor.getTienda().setLogo(tiendaImagenRequest.getUrlImagen());
+        vendedor.getTienda().setLogo(LogoRequest.getLogo());
         vendedorRepository.save(vendedor);
         return ResponseEntity.ok().body(new ApiResponse(true, "Logo updated successfully"));
     }
