@@ -28,6 +28,10 @@ public class TiendaRequest {
     @NotBlank
     @Size(max = 60)
     private String tipoTienda;
+    
+    @NotBlank
+    @Size(max = 100)
+    private String urlLogo;
 
     public String getName() {
         return name;
@@ -59,6 +63,14 @@ public class TiendaRequest {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getUrlLogo() {
+        return urlLogo;
+    }
+
+    public void setUrlLogo(String urlLogo) {
+        this.urlLogo = urlLogo;
     }
     
 }

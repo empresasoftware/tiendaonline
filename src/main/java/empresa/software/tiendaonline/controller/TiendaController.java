@@ -120,7 +120,7 @@ public class TiendaController {
                 .orElseThrow(() -> new AppException("Tipo Tienda not set."));
         Tienda tienda = vendedor.getTienda();
         if (tienda == null ){
-            tienda = new Tienda(tiendaRequest.getName(), tiendaRequest.getShopname(), tiendaRequest.getDescripcion(), tipoTienda);
+            tienda = new Tienda(tiendaRequest.getName(), tiendaRequest.getShopname(), tiendaRequest.getDescripcion(),tiendaRequest.getUrlLogo() ,tipoTienda);
         }
         else{
             return ResponseEntity.badRequest().body(new ApiResponse(false, "La tienda ya ha sido creada!"));
@@ -166,6 +166,7 @@ public class TiendaController {
         tienda.setShopname(tiendaRequest.getShopname());
         tienda.setDescripcion(tiendaRequest.getDescripcion());
         tienda.setTipoTienda(tipoTienda);
+        tienda.setLogo(tiendaRequest.getUrlLogo());
 
         vendedor.setTienda(tienda);
         vendedorRepository.save(vendedor);
@@ -173,108 +174,6 @@ public class TiendaController {
         return ResponseEntity.ok().body(new ApiResponse(true, "Tienda updated successfully"));
     }
 
-    @Component
-    public static class StringToTiendaRequestConverter implements Converter<String, TiendaRequest> {
-
-        @Autowired
-        private ObjectMapper objectMapper;
-
-        @Override
-        @SneakyThrows
-        public TiendaRequest convert(String source) {
-            return objectMapper.readValue(source, TiendaRequest.class);
-        }
-
-        @Override
-        public JavaType getInputType(TypeFactory tf) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public JavaType getOutputType(TypeFactory tf) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-    }
-    
-    
-    @Secured({"ROLE_SHOP"})
-    @PutMapping("/actualizarAll")
-@ApiImplicitParams({
-    @ApiImplicitParam(name = "Authorization", value = "Authorization token", 
-                      required = true, dataType = "string", paramType = "header") })
-    public ResponseEntity<?> actualizarTienda(@CurrentUser UserPrincipal userprincipal, @Valid @RequestParam TiendaRequest tiendaRequest, @RequestParam("logo") MultipartFile file) {
-        Vendedor vendedor = (Vendedor) userRepository.findById(userprincipal.getId()).get();
-
-        TipoTiendaName tipoTiendaName = null;
-        for (TipoTiendaName myVar : TipoTiendaName.values()) {
-            if (myVar.toString().equals(tiendaRequest.getTipoTienda())){
-                tipoTiendaName = myVar;
-            }
-        }
-        
-        if (tipoTiendaName == null){
-            return new ResponseEntity(new ApiResponse(false, "TipoTienda Error!"),
-                    HttpStatus.BAD_REQUEST);
-        }
-
-        TipoTienda tipoTienda = tipoTiendaRepository.findByName(tipoTiendaName)
-                .orElseThrow(() -> new AppException("Tipo Tienda not set."));
-        Tienda tienda = vendedor.getTienda();
-        
-        if (tienda == null) {
-            return ResponseEntity.badRequest().body(new ApiResponse(false, "Primero debe crear la tienda!"));
-        }
-        
-        String urlLogo = null;
-        if (tienda.getLogo() == null){        
-            urlLogo    = fileStorageService.storeFile(file);
-        }else{
-            urlLogo    = fileStorageService.storeFile(file, tienda.getLogo() );
-        }
-        tienda.setName(tiendaRequest.getName());
-        tienda.setShopname(tiendaRequest.getShopname());
-        tienda.setDescripcion(tiendaRequest.getDescripcion());
-        tienda.setTipoTienda(tipoTienda);
-        tienda.setLogo(urlLogo);
-
-        vendedor.setTienda(tienda);
-        vendedorRepository.save(vendedor);
-        
-        return ResponseEntity.ok().body(new ApiResponse(true, "Tienda updated successfully"));
-    }
-
-    @Secured({"ROLE_SHOP"})
-    @PostMapping("/registrarAll")
-    public ResponseEntity<?> nuevaTienda(@CurrentUser UserPrincipal userprincipal, @Valid @RequestBody TiendaRequest tiendaRequest, @RequestParam("logo") MultipartFile file) {
-        Vendedor vendedor = (Vendedor) userRepository.findById(userprincipal.getId()).get();
-
-        TipoTiendaName tipoTiendaName = null;
-        for (TipoTiendaName myVar : TipoTiendaName.values()) {
-            if (myVar.toString().equals(tiendaRequest.getTipoTienda())){
-                tipoTiendaName = myVar;
-            }
-        }
-        
-        if (tipoTiendaName == null){
-            return new ResponseEntity(new ApiResponse(false, "TipoTienda Error!"),
-                    HttpStatus.BAD_REQUEST);
-        }
-
-        TipoTienda tipoTienda = tipoTiendaRepository.findByName(tipoTiendaName)
-                .orElseThrow(() -> new AppException("Tipo Tienda not set."));
-        
-        String urlLogo = fileStorageService.storeFile(file);
-        
-        Tienda tienda = new Tienda(tiendaRequest.getName(), tiendaRequest.getShopname(),tiendaRequest.getDescripcion() ,urlLogo , tipoTienda);
-        vendedor.setTienda(tienda);
-        vendedorRepository.save(vendedor);
-        
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/tiendas/{shopname}")
-                .buildAndExpand(tienda.getShopname()).toUri();
-        
-        return ResponseEntity.created(location).body(new ApiResponse(true, "Tienda registered successfully"));
-    }
     @Secured({"ROLE_SHOP"})
     @PutMapping("/logo")
     public ResponseEntity<?> uploadLogoTienda(@CurrentUser UserPrincipal userprincipal,
