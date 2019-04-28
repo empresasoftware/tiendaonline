@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 public class LogoRequest {
 
     @NotBlank
-    @Size(max = 100)
+    @Size(max = 300)
     private String logo;
 
     public String getLogo() {

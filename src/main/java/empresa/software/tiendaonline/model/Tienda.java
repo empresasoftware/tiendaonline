@@ -50,7 +50,7 @@ public class Tienda extends DateAudit{
     private String descripcion;
 
     //@NotBlank
-    @Size(max = 200)
+    @Size(max = 300)
     private String logo;
     
     @OneToOne(cascade = CascadeType.ALL)
