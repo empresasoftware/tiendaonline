@@ -70,8 +70,8 @@ public class ProductoController {
     @Autowired
     FileStorageService fileStorageService;
 
-    @Autowired
-    FirebaseDatabaseService firebaseDatabaseService;
+    //@Autowired
+    //FirebaseDatabaseService firebaseDatabaseService;
     
     @GetMapping("/{id}")
     public Producto getProducto(@PathVariable("id") Long id) {

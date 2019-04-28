@@ -38,26 +38,26 @@ public class FirebaseDatabaseService {
 
     
     public FirebaseDatabaseService() {
-        try {
-            this.serviceAccount = new FileInputStream(Paths.get(".").toAbsolutePath().normalize().toString()+
-"/src/main/java/empresa/software/tiendaonline/service/tiendaonline-f6186-firebase-adminsdk-cubli-98a0f6bd67.json");
-            this.options = new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setDatabaseUrl("https://tiendaonline-f6186.firebaseio.com")
-                    .build();
-            FirebaseApp.initializeApp(options);
-            database = FirebaseDatabase.getInstance();
-            ref = database.getReference("server/saving-data/fireblog");
-        } catch (IOException ex) {
-            Logger.getLogger(FirebaseDatabaseService.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            this.serviceAccount = new FileInputStream(Paths.get(".").toAbsolutePath().normalize().toString()+
+//"/src/main/java/empresa/software/tiendaonline/service/tiendaonline-f6186-firebase-adminsdk-cubli-98a0f6bd67.json");
+//            this.options = new FirebaseOptions.Builder()
+//                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//                    .setDatabaseUrl("https://tiendaonline-f6186.firebaseio.com")
+//                    .build();
+//            FirebaseApp.initializeApp(options);
+//            database = FirebaseDatabase.getInstance();
+//            ref = database.getReference("server/saving-data/fireblog");
+//        } catch (IOException ex) {
+//            Logger.getLogger(FirebaseDatabaseService.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
     
     public void SaveData(){
-        Map<String, URLImagenRequest> users = new HashMap<>();
-        DatabaseReference usersRef = ref.child("users");
-        users.put("alanisawesome", new URLImagenRequest("June 23, 1912 Alan Turing"));
-        usersRef.setValueAsync(users);
+//        Map<String, URLImagenRequest> users = new HashMap<>();
+//        DatabaseReference usersRef = ref.child("users");
+//        users.put("alanisawesome", new URLImagenRequest("June 23, 1912 Alan Turing"));
+//        usersRef.setValueAsync(users);
 
     }
 }
