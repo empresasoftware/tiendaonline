@@ -29,8 +29,6 @@ public class TiendaRequest {
     @Size(max = 60)
     private String tipoTienda;
     
-    @NotBlank
-    @Size(max = 100)
     private String urlLogo;
 
     public String getName() {

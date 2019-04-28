@@ -17,6 +17,7 @@ import empresa.software.tiendaonline.model.TipoTienda;
 import empresa.software.tiendaonline.model.TipoTiendaName;
 import empresa.software.tiendaonline.model.Vendedor;
 import empresa.software.tiendaonline.payload.ApiResponse;
+import empresa.software.tiendaonline.payload.URLImagenRequest;
 import empresa.software.tiendaonline.payload.ProductoRequest;
 import empresa.software.tiendaonline.repository.CategoriaRepository;
 import empresa.software.tiendaonline.repository.EstadoProductoRepository;
@@ -26,6 +27,7 @@ import empresa.software.tiendaonline.repository.VendedorRepository;
 import empresa.software.tiendaonline.security.CurrentUser;
 import empresa.software.tiendaonline.security.UserPrincipal;
 import empresa.software.tiendaonline.service.FileStorageService;
+import empresa.software.tiendaonline.service.FirebaseDatabaseService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -67,11 +69,16 @@ public class ProductoController {
     
     @Autowired
     FileStorageService fileStorageService;
+
+    @Autowired
+    FirebaseDatabaseService firebaseDatabaseService;
     
     @GetMapping("/{id}")
     public Producto getProducto(@PathVariable("id") Long id) {
         Producto producto = productoRepository.getOne(id);
                // .orElseThrow(() -> new ResourceNotFoundException("Producto", "id", id));
+               //firebaseDatabaseService.SaveData();
+               
         return producto;
     }
 
@@ -89,12 +96,12 @@ public class ProductoController {
         
         Tienda tienda = vendedorRepository.findById(userprincipal.getId()).get().getTienda();
         //String urlImagenPrincipal = fileStorageService.storeFile(file);
-        String urlImagenPrincipal = "https://res.cloudinary.com/hv7wxttwe/image/upload/v1555426080/default-product-image.png";
+        //String urlImagenPrincipal = "https://res.cloudinary.com/hv7wxttwe/image/upload/v1555426080/default-product-image.png";
         Categoria categoria = categoriaRepository.findById(productoRequest.getCategoria()).get();
         EstadoProductoName estadoProductoName = EstadoProductoName.IN_STOCK;
         EstadoProducto estado = estadoProductoRepository.findByName(estadoProductoName).get();
         RatingResume ratingResume = new RatingResume(0, 0);
-        Producto producto = new Producto(productoRequest.getNombre(), productoRequest.getDescripcion(), urlImagenPrincipal, categoria, tienda, estado ,ratingResume);
+        Producto producto = new Producto(productoRequest.getNombre(), productoRequest.getDescripcion(), productoRequest.getImagenPrincipal(), categoria, tienda, estado ,ratingResume);
         producto = productoRepository.save(producto);
 
         return producto;
@@ -125,18 +132,29 @@ public class ProductoController {
         producto.setDescripcion(productoRequest.getDescripcion());
         producto.setCategoria(categoria);
         producto.setEstadoProducto(estadoProducto);
+        producto.setImagenPrincipal(productoRequest.getImagenPrincipal());
         productoRepository.save(producto);
 
         return new ResponseEntity(new ApiResponse(true, "Producto Actualizado"),
                 HttpStatus.ACCEPTED);
     }
     @Secured({"ROLE_SHOP"})
-    @PutMapping("/{id}/imagen")
+    @PutMapping("/{id}/imagen/file")
     public ResponseEntity<?> uploadImagenProducto(@CurrentUser UserPrincipal userprincipal, @PathVariable("id") Long id,
             @RequestParam("file") MultipartFile file) {
         Producto producto = productoRepository.findById(id).get();
         String urlLogo = fileStorageService.storeFile(file);
         producto.setImagenPrincipal(urlLogo);
+        productoRepository.save(producto);
+        return ResponseEntity.ok().body(new ApiResponse(true, "Imagen Principal updated successfully"));
+    }
+
+    @Secured({"ROLE_SHOP"})
+    @PutMapping("/{id}/imagen")
+    public ResponseEntity<?> uploadImagenProducto(@CurrentUser UserPrincipal userprincipal, @PathVariable("id") Long id,
+            @Valid @RequestBody URLImagenRequest productoImagenRequest) {
+        Producto producto = productoRepository.findById(id).get();
+        producto.setImagenPrincipal(productoImagenRequest.getUrlImagen());
         productoRepository.save(producto);
         return ResponseEntity.ok().body(new ApiResponse(true, "Imagen Principal updated successfully"));
     }

@@ -26,6 +26,10 @@ public class ProductoRequest {
 
     private String estado;
 
+    @NotBlank
+    @Size(max = 100)
+    private String imagenPrincipal;
+
     public String getNombre() {
         return nombre;
     }
@@ -56,5 +60,13 @@ public class ProductoRequest {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public String getImagenPrincipal() {
+        return imagenPrincipal;
+    }
+
+    public void setImagenPrincipal(String imagenPrincipal) {
+        this.imagenPrincipal = imagenPrincipal;
     }
 }

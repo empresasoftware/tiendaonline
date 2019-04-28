@@ -26,6 +26,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,6 +58,7 @@ public class DireccionController {
     @Autowired
     private TipoDireccionRepository tipoDireccionRepository;
     
+    @Secured({"ROLE_USER"})
     @PostMapping("/user/tipoDireccion/{tipoDireccion}")
     public ResponseEntity<?> newDireccionUser(@CurrentUser UserPrincipal userprincipal, @Valid @RequestBody DireccionRequest direccionRequest, @PathVariable("tipoDireccion") String tipoDireccionParam){
 
@@ -80,7 +82,7 @@ public class DireccionController {
         return ResponseEntity.ok().body(new ApiResponse(true, "Direccion successfully created"));
     }
 
-
+    @Secured({"ROLE_USER"})
     @PutMapping("/user/tipoDireccion/{tipoDireccion}")
     public ResponseEntity<?> updateDireccionUser(@CurrentUser UserPrincipal userprincipal, @Valid @RequestBody DireccionRequest direccionRequest, @PathVariable("tipoDireccion") String tipoDireccionParam){
 
@@ -106,7 +108,7 @@ public class DireccionController {
         }
         
         if (direccionUpdate == null){
-            return new ResponseEntity(new ApiResponse(false, "Direreccion Not Found!"),
+            return new ResponseEntity(new ApiResponse(false, "Direccion Not Found!"),
                     HttpStatus.NOT_FOUND);        }
         
         direccionUpdate.setCallePrincipal(direccionRequest.getCallePrincipal());
@@ -125,7 +127,8 @@ public class DireccionController {
         return ResponseEntity.ok().body(new ApiResponse(true, "Direccion successfully updated"));
     }
 
-    @PostMapping("/tienda")
+    @Secured({"ROLE_SHOP"})
+    @PostMapping("/tienda/tipoDireccion/{tipoDireccion}")
     public ResponseEntity<?> newDireccionTienda(@CurrentUser UserPrincipal userprincipal, @Valid @RequestBody DireccionRequest direccionRequest, @PathVariable("tipoDireccion") String tipoDireccionParam){
 
         TipoDireccionName tipoDireccionName = null;
@@ -149,7 +152,7 @@ public class DireccionController {
         return ResponseEntity.ok().body(new ApiResponse(true, "Direccion successfully created"));
     }
 
-
+    @Secured({"ROLE_SHOP"})
     @PutMapping("/tienda/tipoDireccion/{tipoDireccion}")
     public ResponseEntity<?> updateDireccionTienda(@CurrentUser UserPrincipal userprincipal, @Valid @RequestBody DireccionRequest direccionRequest, @PathVariable("tipoDireccion") String tipoDireccionParam){
 
@@ -195,7 +198,8 @@ public class DireccionController {
         return ResponseEntity.ok().body(new ApiResponse(true, "Direccion successfully updated"));
     }
     
-    @GetMapping("/tienda/tipoDireccion/{tipoDireccion}")
+    @Secured({"ROLE_USER"})
+    @GetMapping("/user/tipoDireccion/{tipoDireccion}")
     public Direccion getDireccionUser(@CurrentUser UserPrincipal userprincipal, @PathVariable("tipoDireccion") String tipoDireccionParam){
 
         TipoDireccionName tipoDireccionName = null;
@@ -220,6 +224,7 @@ public class DireccionController {
         return null;
     }
 
+    @Secured({"ROLE_SHOP"})
     @GetMapping("/tienda/tipoDireccion/{tipoDireccion}")
     public Direccion getDireccionTienda(@CurrentUser UserPrincipal userprincipal, @PathVariable("tipoDireccion") String tipoDireccionParam){
 
